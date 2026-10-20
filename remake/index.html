@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Intro remake</title>
+<style>
+@font-face{font-family:'Mont';src:url(fonts/mont-500.ttf);font-weight:500}
+@font-face{font-family:'Mont';src:url(fonts/mont-700.ttf);font-weight:700}
+@font-face{font-family:'Mont';src:url(fonts/mont-800.ttf);font-weight:800}
+@font-face{font-family:'Mont';src:url(fonts/mont-900.ttf);font-weight:900}
+html,body{margin:0;background:#000;overflow:hidden}
+#stage{position:relative;width:1280px;height:720px;background:#000;overflow:hidden}
+#band{position:absolute;left:0;top:72px;width:1280px;height:556px;overflow:hidden;
+  background:linear-gradient(to bottom,#3200e3 0px,#3400f3 125px,#3400f3 470px,#3300e4 520px,#3300d8 556px)}
+.lyr{position:absolute;left:0;top:0;width:1280px;height:556px}
+.el{position:absolute;left:0;top:0;transform-origin:50% 50%;will-change:transform}
+.hud{position:absolute;font:500 17px Mont;color:#fff;letter-spacing:.01em;white-space:nowrap}
+#tab{position:absolute;left:576px;top:628px;width:128px;height:22px;background:#000;border-radius:3px;
+  color:#fff;font:800 13px Mont;letter-spacing:.06em;text-align:center;line-height:22px}
+</style>
+</head>
+<body>
+<div id="stage">
+  <div id="band">
+    <div class="lyr" id="g1"><div class="lyr" id="whoClip"></div></div>
+    <div class="lyr" id="g2"></div>
+    <div class="lyr" id="g3"></div>
+    <div class="hud" style="left:14px;top:22px">RACHEL PLATTEN</div>
+    <div class="hud" style="right:22px;top:22px">RACHEL PLATTEN</div>
+    <div class="hud" style="left:14px;top:545px">RACHEL PLATTEN</div>
+    <div class="hud" style="right:22px;top:545px">RACHEL PLATTEN</div>
+  </div>
+  <div id="tab">MORILR</div>
+</div>
+<script>
+window.ready = Promise.all(['500','700','800','900'].map(w => document.fonts.load(w + ' 40px Mont'))).then(() => new Promise(res => {
+  const s = document.createElement('script'); s.src = 'anim.js'; s.onload = () => res(true); document.body.appendChild(s);
+}));
+</script>
+</body>
+</html>
