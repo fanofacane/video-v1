@@ -294,14 +294,14 @@ scene(21.0, 23.6, d => {
 });
 
 // ===== 11. DON'T STOP (23.55 – 26.0) =====
-scene(23.55, 26.0, d => {
+scene(23.5, 26.0, d => {
   const chars = [...'DON’T'], letters = chars.map(ch => T(ch, 800, 46, { scaleX: 1.08 }));
   const dont = T('DON’T', 800, 46, { scaleX: 1.08, track: 0.01 }), stop = T('STOP', 800, 46, { scaleX: 1.08, track: 0.01 });
   const stars = [0, 1, 2, 3].map(() => star(34));
   d.append(...letters, dont, stop, ...stars);
   const lx = [-70, -22, 26, 56, 82];
   return lt => {
-    const LAND = 0.95;
+    const LAND = 1.0; // 24.5s — on a whole frame so the held slam frames stay solid
     if (lt < LAND + 0.05) {
       letters.forEach((el, i) => { const a = 0.05 + i * 0.1, q = P(lt, a, a + 0.28); place(el, { v: lt > a, x: 640 + lx[i] - lt * 16, y: L(-40, 360, back(q, 1.2)), rz: L(-16, 0, q) }); });
       place(dont, { v: false });
