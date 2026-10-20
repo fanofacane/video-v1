@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Type in Motion</title>
+<style>
+@font-face{font-family:'Mont';src:url(fonts/mont-500.ttf);font-weight:500}
+@font-face{font-family:'Mont';src:url(fonts/mont-700.ttf);font-weight:700}
+@font-face{font-family:'Mont';src:url(fonts/mont-800.ttf);font-weight:800}
+@font-face{font-family:'Mont';src:url(fonts/mont-900.ttf);font-weight:900}
+html,body{margin:0;background:#000;overflow:hidden}
+#stage{position:relative;width:1280px;height:720px;overflow:hidden;background:#3400f3}
+#bg{position:absolute;inset:0}
+.lyr{position:absolute;left:0;top:0;width:1280px;height:720px;transform-origin:640px 360px}
+.el{position:absolute;left:0;top:0;transform-origin:50% 50%;will-change:transform}
+.hud{position:absolute;font:500 17px Mont;letter-spacing:.01em;white-space:nowrap;z-index:50}
+#tab{position:absolute;left:576px;top:694px;width:128px;height:26px;border-radius:3px 3px 0 0;
+  font:800 13px Mont;letter-spacing:.08em;text-align:center;line-height:26px;z-index:50}
+</style>
+</head>
+<body>
+<div id="stage">
+  <div id="bg"></div>
+  <div class="hud" style="left:20px;top:16px">TYPE IN MOTION</div>
+  <div class="hud" style="right:22px;top:16px">STUDY Nº01</div>
+  <div class="hud" style="left:20px;top:684px">TYPE IN MOTION</div>
+  <div class="hud" style="right:22px;top:684px">STUDY Nº01</div>
+  <div id="tab">CLAUDE</div>
+</div>
+<script>
+window.ready = Promise.all(['500','700','800','900'].map(w => document.fonts.load(w + ' 40px Mont'))).then(() => new Promise(res => {
+  const s = document.createElement('script'); s.src = 'motion.js'; s.onload = () => res(true); document.body.appendChild(s);
+}));
+</script>
+</body>
+</html>
