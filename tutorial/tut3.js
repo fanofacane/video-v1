@@ -16,9 +16,9 @@ const pending = [];
 const setImg = (im, src) => { if (im._src !== src) { im._src = src; im.src = src; pending.push(im.decode().catch(() => {})); } };
 const fr = (s, lo, hi) => Math.max(lo, Math.min(hi, Math.round(s * FPS) + 1));
 const SRC = {
-  a: s => `a960/${p4(fr(s, 1, 900))}.jpg`, b: s => `b960/${p4(fr(s, 1, 900))}.jpg`, B: s => `bfull/${p4(fr(s, 601, 900))}.jpg`,
+  a: s => `aH/${p4(fr(s, 1, 900))}.jpg`, b: s => `b960/${p4(fr(s, 1, 900))}.jpg`, B: s => `bfull/${p4(fr(s, 601, 900))}.jpg`,
   a2: s => `a2full/${p4(fr(s, 361, 603))}.jpg`, b2: s => `b2full/${p4(fr(s, 361, 603))}.jpg`,
-  m: s => `m960/${p4(fr(s, 1, 360))}.jpg`, ref: s => `ref/${p3(fr(s, 1, 111))}.jpg`, rmk: s => `rmk/${p3(fr(s, 1, 111))}.jpg`,
+  m: s => `mH/${p4(fr(s, 1, 360))}.jpg`, ref: s => `ref/${p3(fr(s, 1, 111))}.jpg`, rmk: s => `rmk/${p3(fr(s, 1, 111))}.jpg`,
 };
 const el = (parent, cls, html = '', st = {}) => { const d = document.createElement('div'); if (cls) d.className = cls; d.innerHTML = html; Object.assign(d.style, st); parent.appendChild(d); return d; };
 const appear = (d, t, t0, dy = 26) => { const q = eOutX(P(t, t0, t0 + 0.5)); d.style.opacity = q; d.style.transform = `translateY(${(1 - q) * dy}px)`; return q; };
@@ -87,7 +87,7 @@ seg(12, 16, '', d => {
   // thumbnails: the prompt document from the recording, and a frame of the reference video
   const s1 = 696 / 1025, s2 = 696 / 1280;
   const c1 = card(140, '方法一', '写一段提示词', '适合：你清楚自己想要什么效果',
-    `<img src="rec/0721.jpg" style="position:absolute;width:${1280 * s1}px;left:${-255 * s1}px;top:${-140 * s1}px">`);
+    `<img src="recH/0721.jpg" style="position:absolute;width:${1280 * s1}px;left:${-255 * s1}px;top:${-140 * s1}px">`);
   const c2 = card(1020, '方法二', '丢一个对标视频', '适合：看到喜欢的视频，想照着做',
     `<img src="ref/060.jpg" style="position:absolute;width:${1280 * s2}px;left:0;top:${-72 * s2 - 40}px"><div class="tagl">参考：网络作品</div>`);
   const next = el(d, 'abs', `<div class="ln s" style="position:static;text-align:center;font-size:44px;color:#fff">先看方法一 · 这里拿 <b>Codex</b> 做演示 ↓</div>`, { left: 0, right: 0, top: '930px' });
@@ -101,7 +101,7 @@ seg(12, 16, '', d => {
   };
 });
 const REC = { x: 240, y: 60, w: 1440, h: 810 };
-const VIEW = { full: [0, 0, 1280, 720], msg: [647, 32, 400, 225], player: [300, 160, 640, 360], doc: [255, 140, 1025, 577] };
+const VIEW = { full: [0, 0, 1280, 720], msg: [592, 10, 520, 292], player: [300, 160, 640, 360], doc: [255, 140, 1025, 577] };
 // recording time + camera (crop in recording pixels) for a given local time
 function recPlan(lt) {
   const ZIN = [0.7, 1.3], HOLD = 1.5, ZOUT = [ZIN[1] + HOLD, ZIN[1] + HOLD + 0.6], FREEZE = 2.3, RATE = 1.15;
@@ -128,7 +128,7 @@ seg(16, 41, '', d => {
     const q = eOutX(P(lt, 0, 0.5)); box.style.opacity = q; box.style.transform = `scale(${L(0.94, 1, q)})`;
     const { rt, cam } = recPlan(lt), s = REC.w / cam[2];
     Object.assign(im.style, { width: 1280 * s + 'px', height: 720 * s + 'px', left: -cam[0] * s + 'px', top: -cam[1] * s + 'px' });
-    setImg(im, `rec/${p4(fr(rt, 49, 821))}.jpg`);
+    setImg(im, `recH/${p4(fr(rt, 49, 821))}.jpg`);
     // highlight frame around the message while in close-up
     const hk = P(lt, 1.2, 1.5) * (1 - P(lt, 2.6, 2.9));
     const mx = (757 - cam[0]) * s, my = (104 - cam[1]) * s, mw = 186 * s, mh = 78 * s;
@@ -143,7 +143,7 @@ seg(41, 47, '', d => {
   const im = m.im; im.style.width = 'auto'; im.style.height = 'auto';
   return (t, lt) => { appear(m, lt, 0); const c = VIEW.doc, s = MW / c[2];
     Object.assign(im.style, { width: 1280 * s + 'px', height: 720 * s + 'px', left: -c[0] * s + 'px', top: -c[1] * s + 'px', filter: `blur(${L(0, 14, eOut(P(lt, 0.4, 1.5)))}px)` });
-    setImg(im, `rec/${p4(fr(23.8 + lt * 0.3, 49, 821))}.jpg`); q.style.opacity = P(lt, 0.8, 1.2); q.style.transform = `scale(${1 + 0.06 * Math.sin(lt * 5)})`; };
+    setImg(im, `recH/${p4(fr(23.8 + lt * 0.3, 49, 821))}.jpg`); q.style.opacity = P(lt, 0.8, 1.2); q.style.transform = `scale(${1 + 0.06 * Math.sin(lt * 5)})`; };
 });
 line(41.2, 47, 380, '这种提示词，', '', 'R'); line(41.7, 47, 470, '到底<span class="y">怎么写</span>？', '', 'R');
 
@@ -261,7 +261,7 @@ seg(151, 161, '', d => {
 seg(161, 168, '', d => {
   const m = media(d, 'R', '完整提示词'); const im = m.im; im.style.width = 'auto'; im.style.height = 'auto';
   return (t, lt) => { appear(m, lt, 0.1); const c = VIEW.doc, s = MW / c[2];
-    Object.assign(im.style, { width: 1280 * s + 'px', height: 720 * s + 'px', left: -c[0] * s + 'px', top: -c[1] * s + 'px' }); setImg(im, `rec/${p4(fr(18.5 + lt * 1.1, 49, 821))}.jpg`); };
+    Object.assign(im.style, { width: 1280 * s + 'px', height: 720 * s + 'px', left: -c[0] * s + 'px', top: -c[1] * s + 'px' }); setImg(im, `recH/${p4(fr(18.5 + lt * 1.1, 49, 821))}.jpg`); };
 });
 line(161.2, 168, 330, '需要这份提示词', '', 'R'); line(161.7, 168, 415, '<span class="y">评论区留言</span>', '', 'R'); line(163.6, 168, 560, '下期见 ✦', 's', 'R');
 
