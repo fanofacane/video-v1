@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Type in Motion — Glitch</title>
+<style>
+@font-face{font-family:'JBM';src:url(fonts/JetBrainsMono-Medium.ttf);font-weight:500}
+@font-face{font-family:'JBM';src:url(fonts/JetBrainsMono-Bold.ttf);font-weight:700}
+@font-face{font-family:'JBM';src:url(fonts/JetBrainsMono-ExtraBold.ttf);font-weight:800}
+html,body{margin:0;background:#000;overflow:hidden}
+canvas{display:block}
+</style>
+</head>
+<body>
+<canvas id="c" width="1920" height="1080"></canvas>
+<script>
+window.ready = Promise.all(['500','700','800'].map(w => document.fonts.load(w + ' 40px JBM'))).then(() => new Promise(res => {
+  const s = document.createElement('script'); s.src = 'film.js'; s.onload = () => res(true); document.body.appendChild(s);
+}));
+</script>
+</body>
+</html>
