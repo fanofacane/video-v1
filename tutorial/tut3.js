@@ -76,9 +76,29 @@ line(6.8, 12, 560, '很多人在评论区问：', 's', 'R'); line(7.4, 12, 615, 
 
 // 2 · the answer, then a centred recording with a push-in on the prompt message
 seg(12, 16, '', d => {
-  const t1_ = el(d, 'abs', `<div class="ln" style="position:static;text-align:center;font-size:88px">其实，只用了<span class="y">一段提示词</span></div>`, { left: 0, right: 0, top: '380px' });
-  const t2_ = el(d, 'abs', `<div class="ln s" style="position:static;text-align:center;font-size:44px">这里拿 <b style="color:#fff">Codex</b> 做演示 ↓</div>`, { left: 0, right: 0, top: '560px' });
-  return (t, lt) => { appear(t1_, lt, 0.2); appear(t2_, lt, 1.6); d.style.opacity = 1 - P(lt, 3.7, 4.0); };
+  // two ways to get this kind of video: write a prompt, or hand over a reference video
+  const head = el(d, 'abs', `<div class="ln" style="position:static;text-align:center;font-size:76px">做这种视频，有<span class="y">两种方法</span></div>`, { left: 0, right: 0, top: '150px' });
+  const card = (x, n, title, sub, thumb) => el(d, 'abs', `
+      <div style="font:900 30px Mont;color:var(--yel);letter-spacing:.08em">${n}</div>
+      <div style="font:700 50px SC;margin:6px 0 18px">${title}</div>
+      <div style="height:300px;border-radius:12px;overflow:hidden;background:#000;position:relative">${thumb}</div>
+      <div style="font:500 28px SC;color:var(--dim);margin-top:16px">${sub}</div>`,
+    { left: x + 'px', top: '300px', width: '760px', padding: '28px 32px', boxSizing: 'border-box', borderRadius: '22px', background: 'var(--pn)', border: '3px solid var(--ln)' });
+  // thumbnails: the prompt document from the recording, and a frame of the reference video
+  const s1 = 696 / 1025, s2 = 696 / 1280;
+  const c1 = card(140, '方法一', '写一段提示词', '适合：你清楚自己想要什么效果',
+    `<img src="rec/0721.jpg" style="position:absolute;width:${1280 * s1}px;left:${-255 * s1}px;top:${-140 * s1}px">`);
+  const c2 = card(1020, '方法二', '丢一个对标视频', '适合：看到喜欢的视频，想照着做',
+    `<img src="ref/060.jpg" style="position:absolute;width:${1280 * s2}px;left:0;top:${-72 * s2 - 40}px"><div class="tagl">参考：网络作品</div>`);
+  const next = el(d, 'abs', `<div class="ln s" style="position:static;text-align:center;font-size:44px;color:#fff">先看方法一 · 这里拿 <b>Codex</b> 做演示 ↓</div>`, { left: 0, right: 0, top: '930px' });
+  return (t, lt) => {
+    appear(head, lt, 0.05); appear(c1, lt, 0.45, 40); appear(c2, lt, 0.8, 40);
+    const pick = eOut(P(lt, 2.3, 2.6));
+    c1.style.borderColor = pick > 0.5 ? 'var(--yel)' : 'var(--ln)'; c1.style.boxShadow = `0 0 0 ${8 * pick}px rgba(239,255,12,.15)`;
+    c2.style.opacity = Math.min(c2.style.opacity, 1 - 0.65 * pick);
+    appear(next, lt, 2.45);
+    d.style.opacity = 1 - P(lt, 3.75, 4.0);
+  };
 });
 const REC = { x: 240, y: 60, w: 1440, h: 810 };
 const VIEW = { full: [0, 0, 1280, 720], msg: [647, 32, 400, 225], player: [300, 160, 640, 360], doc: [255, 140, 1025, 577] };
