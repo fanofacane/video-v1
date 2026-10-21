@@ -57,7 +57,17 @@ for a, b in cues.get('type', [(39.0, 42.4), (49.5, 53.8), (60.0, 64.2), (80.6, 8
     t = a
     while t < b: put(fx, tick(), t, pan=rng.random() * 0.4 - 0.2); t += 1 / 14 * (0.7 + rng.random() * 0.6)
 for t in cues.get('whoosh', [10, 28, 36, 46, 58, 68, 88, 98, 106, 112, 124, 140, 150, 166, 171]): put(fx, whoosh(), t - 0.25)
-mix = bed * duck[:, None] + film + fx
+# --- narration (optional argv[4] = vo_script.json, clips in vo/<id>.wav) ---
+vo = np.zeros((N, 2)); vduck = np.ones(N)
+if len(sys.argv) > 4:
+    for c in json.load(open(sys.argv[4])):
+        w = wave.open('vo/%s.wav' % c['id']); x = np.frombuffer(w.readframes(w.getnframes()), '<i2').astype(float) / 32768
+        if w.getframerate() != SR: raise SystemExit('vo must be 48k')
+        x = x / (np.sqrt((x ** 2).mean()) + 1e-9) * 0.11          # even out loudness between clips
+        put(vo, np.repeat(x[:, None], 2, 1), c['at'])
+        a, b = int((c['at'] - 0.15) * SR), min(N, int((c['at'] + len(x) / SR + 0.25) * SR)); vduck[max(0, a):b] = 0.32
+    k2 = int(0.3 * SR); vduck = np.convolve(vduck, np.ones(k2) / k2, mode='same')
+mix = bed * (duck * vduck)[:, None] + film + fx * (0.6 + 0.4 * vduck)[:, None] + vo
 tt = np.arange(N) / SR
 mix *= (np.minimum(1, tt / 0.3) * np.clip((DUR - tt) / 1.5, 0, 1))[:, None]
 mix = np.tanh(mix * 1.1) * 0.95
