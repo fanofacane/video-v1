@@ -6,3 +6,11 @@ out/
 fonts/
 *.mp4
 audio_cues.json
+rec/
+m960/
+ref/
+rmk/
+big13.jpg
+big25.jpg
+bbox.txt
+bbox.js

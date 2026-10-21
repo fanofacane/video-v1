@@ -53,10 +53,10 @@ k = int(0.15 * SR); duck = np.convolve(duck, np.ones(k) / k, mode='same')
 def tick(): t = TT(0.025); return lp(rng.standard_normal(len(t)), 5000) * np.exp(-t * 220) * 0.06
 def whoosh(d=0.5):
     n = int(d * SR); x = lp(rng.standard_normal(n), 3000); tt = np.linspace(0, 1, n); return x / np.abs(x).max() * np.sin(np.pi * tt) ** 2 * 0.07
-for a, b in [(39.0, 42.4), (49.5, 53.8), (60.0, 64.2), (80.6, 85.6), (90.0, 92.4), (114.0, 117.4), (119.0, 122.2)]:
+for a, b in cues.get('type', [(39.0, 42.4), (49.5, 53.8), (60.0, 64.2), (80.6, 85.6), (90.0, 92.4), (114.0, 117.4), (119.0, 122.2)]):
     t = a
     while t < b: put(fx, tick(), t, pan=rng.random() * 0.4 - 0.2); t += 1 / 14 * (0.7 + rng.random() * 0.6)
-for t in (10, 28, 36, 46, 58, 68, 88, 98, 106, 112, 124, 140, 150, 166, 171): put(fx, whoosh(), t - 0.25)
+for t in cues.get('whoosh', [10, 28, 36, 46, 58, 68, 88, 98, 106, 112, 124, 140, 150, 166, 171]): put(fx, whoosh(), t - 0.25)
 mix = bed * duck[:, None] + film + fx
 tt = np.arange(N) / SR
 mix *= (np.minimum(1, tt / 0.3) * np.clip((DUR - tt) / 1.5, 0, 1))[:, None]
