@@ -40,7 +40,7 @@ for k in range(int(DUR / B)):
 # --- film inserts ---
 duck = np.ones(N)
 for c in cues['aud']:
-    src = FILM[c['set']]; i0 = int(c['from'] * SR); seg = src[i0:i0 + int(c['dur'] * SR)].copy()
+    src = FILM[c['set']] if 'set' in c else readwav(c['file']); i0 = int(c['from'] * SR); seg = src[i0:i0 + int(c['dur'] * SR)].copy()
     n = len(seg); e = np.ones(n); r = int(0.05 * SR); e[:r] = np.linspace(0, 1, r); e[-r:] = np.linspace(1, 0, r)
     seg *= e[:, None]
     pan = c.get('pan', 0); g = c.get('g', 1)
