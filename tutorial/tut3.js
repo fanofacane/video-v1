@@ -1,6 +1,10 @@
 'use strict';
 // Tutorial v3 — alternating text/footage sides, centred Codex recording with a push-in on the prompt message.
-const FPS = 30, DUR = 168;
+const FPS = 30;
+const CUTS = [[42.5, 47], [49, 50], [60, 64]];          // story-time ranges removed from the edit
+const CUT_TOTAL = CUTS.reduce((a, [x, y]) => a + y - x, 0), DUR = 168 - CUT_TOTAL;
+const toStory = t => { let s = t; for (const [a, b] of CUTS) if (s >= a) s += b - a; return s; };
+const toOut = s => { let o = s; for (const [a, b] of CUTS) { if (s >= b) o -= b - a; else if (s > a) return null; } return o; };
 const v = document.getElementById('v');
 const clamp = (x, a = 0, b = 1) => (x < a ? a : x > b ? b : x);
 const L = (a, b, t) => a + (b - a) * t;
@@ -148,19 +152,17 @@ function block(t0, t1, side, num, title, excerpt, takeaway, right) {
   });
 }
 const film = (from, label = '对应画面', loop = 0) => (d, side) => { const m = media(d, side, label); return (t, lt) => { appear(m, lt, 0.1); m.show('a', from + (loop ? lt % loop : lt)); }; };
-const VOCAB = [['3D 翻入', 0.0, 0.9], ['硬币翻转', 0.0, 0.8], ['穿遮罩滑入', 0.45, 1.7], ['旋转甩出', 2.0, 2.9], ['波浪字', 4.6, 6.4], ['巨字砸落', 6.8, 8.3], ['节拍冲击', 10.0, 11.0], ['跑马灯矩阵', 16.0, 17.9]];
+const VOCAB = [['3D 翻入', 0.0, 0.9], ['旋转甩出', 2.0, 2.9], ['波浪字', 4.6, 6.4], ['巨字砸落', 6.8, 8.3], ['节拍冲击', 10.0, 11.0], ['跑马灯矩阵', 16.0, 17.9]];
 block(50, 64, 'L', '①', '动效', '<span class="hl">3D 翻入</span>：rotateY 从 −86° 到 0°，0.35s，cubicOut<br><span class="hl">巨字砸落</span>：第 0 帧放大约 16 倍，两帧定格、不要模糊<br>……一共 13 个动作，全部点名',
   '别说"酷一点"，直接点名动作', (d, side) => {
     const x0 = MEDIA[side][0];
-    const m = media(d, side, '巨字砸落');
-    const grid = el(d, 'abs', '', { left: x0 - 4 + 'px', top: '230px', width: '940px', height: '380px' });
-    const tiles = VOCAB.map(([n], i) => el(grid, 'tile', `<img><b>${n}</b>`, { left: (i % 4) * 240 + 'px', top: Math.floor(i / 4) * 190 + 'px' }));
-    const gl = el(d, 'abs', '动作词库 · 每格都是成片里的真实画面', { left: x0 + 'px', top: '640px', font: '500 28px SC', color: 'var(--dim)' });
+    const grid = el(d, 'abs', '', { left: x0 + 'px', top: '235px', width: '920px', height: '470px' });
+    const tiles = VOCAB.map(([n], i) => { const tl = el(grid, 'tile', `<img><b>${n}</b>`, { left: (i % 3) * 312 + 'px', top: Math.floor(i / 3) * 242 + 'px', width: '296px', height: '226px' }); tl.querySelector('img').style.height = '170px'; tl.querySelector('b').style.height = tl.querySelector('b').style.lineHeight = '56px'; return tl; });
+    const gl = el(d, 'abs', '动作词库 · 每格都是成片里的真实画面', { left: x0 + 'px', top: '730px', font: '500 28px SC', color: 'var(--dim)' });
     return (t, lt) => {
-      const g = lt >= 4.2; m.style.display = g ? 'none' : 'block'; grid.style.display = gl.style.display = g ? 'block' : 'none';
-      if (!g) { appear(m, lt, 0.1); m.show('a', 6.8 + (lt % 1.6)); return; }
-      appear(gl, lt, 4.6);
-      tiles.forEach((tl, i) => { const q = eOutX(P(lt, 4.2 + i * 0.18, 4.7 + i * 0.18)); tl.style.opacity = q; tl.style.transform = `scale(${L(0.85, 1, q)})`;
+      grid.style.display = gl.style.display = 'block';
+      appear(gl, lt, 1.2);
+      tiles.forEach((tl, i) => { const q = eOutX(P(lt, 0.15 + i * 0.15, 0.65 + i * 0.15)); tl.style.opacity = q; tl.style.transform = `scale(${L(0.85, 1, q)})`;
         const [, a, b] = VOCAB[i]; setImg(tl.querySelector('img'), SRC.a(a + (lt % (b - a)))); });
     };
   });
@@ -245,7 +247,8 @@ line(161.2, 168, 330, '需要这份提示词', '', 'R'); line(161.7, 168, 415, '
 
 // ---------- frame ----------
 const capEl = document.getElementById('cap');
-async function setTime(t) {
+async function setTime(tOut) {
+  const t = toStory(tOut);
   pending.length = 0; let chap = '', full = false;
   for (const s of SEGS) { const on = t >= s.t0 && t < s.t1; s.d.style.display = on ? 'block' : 'none'; if (on) { chap = s.chap; full = s.full; } }
   for (const C of Object.values(COLS)) C.querySelectorAll('.abs,.doc').forEach(x => (x.style.display = 'none'));
@@ -257,14 +260,15 @@ async function setTime(t) {
   if (c) { capEl.textContent = c[2]; capEl.style.opacity = eOutX(P(t, c[0], c[0] + 0.3)) * (1 - P(t, c[1] - 0.15, c[1])); }
   document.getElementById('glow').style.display = full ? 'none' : 'block';
   document.getElementById('chap').textContent = full ? '' : chap;
-  document.getElementById('prog').style.width = t / DUR * 1920 + 'px';
-  const fin = 1 - P(t, DUR - 0.6, DUR); v.style.filter = fin < 1 ? `brightness(${fin})` : '';
+  document.getElementById('prog').style.width = tOut / DUR * 1920 + 'px';
+  const fin = 1 - P(tOut, DUR - 0.6, DUR); v.style.filter = fin < 1 ? `brightness(${fin})` : '';
   await Promise.all(pending);
   return true;
 }
 window.setTime = setTime; window.DUR = DUR;
 window.AUD = [{ file: 'out/open_a.wav', at: 0, from: 0, dur: 4.0, pan: -0.6, g: 0.75 }, { file: 'out/open_b.wav', at: 0, from: 0, dur: 4.0, pan: 0.6, g: 0.75 },
   { set: 'b', at: 151, from: 20.0, dur: 10, pan: 0, g: 1 }];
-window.WHOOSH = [4, 12, 16, 41, 47, 50, 64, 73, 82, 90, 99, 107, 113, 119, 125, 130, 136, 141, 151, 161];
+window.WHOOSH = [4, 12, 16, 41, 47, 50, 64, 73, 82, 90, 99, 107, 113, 119, 125, 130, 136, 141, 151, 161].map(toOut).filter(x => x !== null);
+window.AUD = window.AUD.map(a => ({ ...a, at: toOut(a.at) }));
 window.ready = Promise.all(['400 30px SC', '500 30px SC', '700 30px SC', '800 30px Mont', '900 30px Mont'].map(f => document.fonts.load(f))).then(() => true);
 if (!/render/.test(location.search)) window.ready.then(() => { const t0 = performance.now(); const loop = async () => { await setTime(((performance.now() - t0) / 1000) % DUR); requestAnimationFrame(loop); }; loop(); });
