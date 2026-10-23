@@ -1,4 +1,5 @@
 """150 BPM score + sound design for COLOR CLASH (30s). Cue times match clash.js.
+24.0–25.2 chops: PINK / BLUE / GOLD / CLASH!
 Energy map: groove 0–9.6 | break 9.6–11.2 | build 11.2–12.6 | silence | DROP 12.8–19.2 | tape stop 19.2,
 silence 19.6–20.0 | ONE MORE TIME | DROP 2 20.8–27.2 | finale 27.2, last hit 28.8.
 usage: python3 score.py out.wav"""
@@ -189,7 +190,7 @@ pads(20.8, 27.2, 5600, 1.1); riff(20.8, 27.2, 1.0); riff(20.8, 27.2, 0.45, 12)
 for b in range(4): add(crash(1.4, 0.5), 20.8 + b * BAR)
 for i, m in enumerate((74, 77, 79, 82)): add(chop(('ih', 'ih', 'ih', 'ur')[i], m, 0.22), 22.4 + i * BT, send=0.3)   # FEEL IT IN COLOR
 add(whoosh(0.3, 500, 7000, 0.7, 2.0), 23.6)
-for i, (v, m) in enumerate((('ih', 77), ('ai', 79), ('oo', 74), ('oh', 82))): add(chop(v, m, 0.3, 1.1), 24.0 + i * BT, send=0.3); add(whoosh(0.12, 7000, 1500, 0.6, 1.0, rev=True), 24.0 + i * BT)
+for i, (v, m) in enumerate((('ih', 77), ('oo', 74), ('oh', 82), ('ae', 79))): add(chop(v, m, 0.3, 1.1), 24.0 + i * BT, send=0.3); add(whoosh(0.12, 7000, 1500, 0.6, 1.0, rev=True), 24.0 + i * BT)
 for v, m, t0 in (('ah', 74, 25.6), ('ae', 77, 26.0), ('uh', 82, 26.4)): add(chop(v, m, 0.3, 1.1), t0, send=0.3)
 add(boom(0.6), 26.4); add(whoosh(0.35, 400, 9000, 1.0, 2.5), 26.85)
 # ===== 27.2–30 FINALE =====

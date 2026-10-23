@@ -15,7 +15,7 @@ video-v1/
     │   ├── film/  intro/      源码（按视频的组成部分划分）
     │   ├── output/            成片（提交）
     │   └── out/               中间文件（不提交）
-    └── 02-color-clash/        第二期：COLOR CLASH，150 BPM 波普撞色卡点
+    └── 02-color-clash/        第二期：COLOR CLASH，150 BPM 固定四色波普卡点
 ```
 
 ## 新做一支视频的约定
