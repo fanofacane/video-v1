@@ -8,6 +8,7 @@ video-v1/
 ├── README.md                  本文件：结构与约定
 ├── PROMPT_复刻提示词.md        第一期成片的复刻提示词
 ├── PROMPT_COLOR_CLASH.md      第二期成片的提示词
+├── PROMPT_文字PV.md            第三期成片的提示词
 └── videos/                    每支视频一个文件夹
     ├── 01-type-in-motion/     第一期：TYPE IN MOTION + 剪映开场
     │   ├── README.md          这支视频是什么、怎么构建
@@ -15,7 +16,8 @@ video-v1/
     │   ├── film/  intro/      源码（按视频的组成部分划分）
     │   ├── output/            成片（提交）
     │   └── out/               中间文件（不提交）
-    └── 02-color-clash/        第二期：COLOR CLASH，150 BPM 固定四色波普卡点
+    ├── 02-color-clash/        第二期：COLOR CLASH，150 BPM 固定四色波普卡点
+    └── 03-moji-pv/            第三期：文字PV，竖屏日系歌词动态视频
 ```
 
 ## 新做一支视频的约定

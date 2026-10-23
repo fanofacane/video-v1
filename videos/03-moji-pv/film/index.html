@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<title>Moji PV</title>
+<style>
+@font-face{font-family:'Mincho';src:url(fonts/mincho-500.woff2) format('woff2');font-weight:500}
+@font-face{font-family:'Mincho';src:url(fonts/mincho-800.woff2) format('woff2');font-weight:800}
+@font-face{font-family:'Mont';src:url(fonts/mont-900.ttf);font-weight:900}
+html,body{margin:0;background:#000;overflow:hidden}
+canvas{display:block;width:1080px;height:1920px}
+</style>
+</head>
+<body>
+<canvas id="c" width="1080" height="1920"></canvas>
+<script src="lyrics.js"></script>
+<script>
+window.ready = Promise.all(['500 40px Mincho', '800 40px Mincho', '900 40px Mont'].map(f => document.fonts.load(f, '愛してるA'))).then(() => new Promise(res => {
+  const s = document.createElement('script'); s.src = 'pv.js'; s.onload = () => res(true); document.body.appendChild(s);
+}));
+</script>
+</body>
+</html>
