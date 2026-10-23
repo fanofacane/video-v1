@@ -8,11 +8,11 @@
 @font-face{font-family:'Mincho';src:url(fonts/mincho-800.woff2) format('woff2');font-weight:800}
 @font-face{font-family:'Mont';src:url(fonts/mont-900.ttf);font-weight:900}
 html,body{margin:0;background:#000;overflow:hidden}
-canvas{display:block;width:1080px;height:1920px}
+canvas{display:block;width:1920px;height:1080px}
 </style>
 </head>
 <body>
-<canvas id="c" width="1080" height="1920"></canvas>
+<canvas id="c" width="1920" height="1080"></canvas>
 <script src="lyrics.js"></script>
 <script>
 window.ready = Promise.all(['500 40px Mincho', '800 40px Mincho', '900 40px Mont'].map(f => document.fonts.load(f, '愛してるA'))).then(() => new Promise(res => {

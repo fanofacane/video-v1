@@ -1,5 +1,5 @@
-// node render.mjs stills <t1,t2,...> <outdir>     -> single-sample PNG stills at 1080x1920
-// node render.mjs video <out.mp4> [subframes]      -> 1080x1920 @30fps; motion blur is averaged inside the page
+// node render.mjs stills <t1,t2,...> <outdir>     -> single-sample PNG stills at 1920x1080
+// node render.mjs video <out.mp4> [subframes]      -> 1920x1080 @30fps; motion blur is averaged inside the page
 import { createRequire } from 'module';
 import { spawn } from 'child_process';
 import path from 'path'; import fs from 'fs';
@@ -8,7 +8,7 @@ const pw = require('/opt/node22/lib/node_modules/playwright');
 const url = 'file://' + path.resolve('index.html') + '?render';
 const FPS = 30, NF = 900;
 async function open(browser) {
-  const page = await browser.newPage({ viewport: { width: 1080, height: 1920 }, deviceScaleFactor: 1 });
+  const page = await browser.newPage({ viewport: { width: 1920, height: 1080 }, deviceScaleFactor: 1 });
   page.on('pageerror', e => console.error('PAGE ERROR', e)); page.on('console', m => console.log('console:', m.text()));
   await page.goto(url); await page.waitForFunction(() => window.ready); await page.evaluate(() => window.ready);
   return page;

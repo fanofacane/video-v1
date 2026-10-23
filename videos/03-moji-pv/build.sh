@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
-# Episode 03 — 文字PV (vertical Japanese lyric video). Build from scratch.
+# Episode 03 — 文字PV (Japanese lyric video). Build from scratch.
 # Needs: node + playwright (Chromium), python3 + numpy, ffmpeg. Fonts are in film/fonts (Mincho is a subset:
 # if you add new characters to lyrics.js, re-run fonts.sh to fetch a new subset).
-# Output: output/moji_pv.mp4 (30s, 1080x1920, 30fps, ~20 MB).
+# Output: output/moji_pv.mp4 (30s, 1920x1080, 30fps, ~20 MB).
 set -euo pipefail
 cd "$(dirname "$0")"
 mkdir -p out output
