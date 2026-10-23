@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<title>Orbit</title>
+<title>Color Clash</title>
 <style>
 @font-face{font-family:'Mont';src:url(fonts/mont-500.ttf);font-weight:500}
 @font-face{font-family:'Mont';src:url(fonts/mont-800.ttf);font-weight:800}
@@ -15,7 +15,7 @@ canvas{display:block;width:1920px;height:1080px}
 <canvas id="c" width="1920" height="1080"></canvas>
 <script>
 window.ready = Promise.all(['500', '800', '900'].map(w => document.fonts.load(w + ' 40px Mont'))).then(() => new Promise(res => {
-  const s = document.createElement('script'); s.src = 'orbit.js'; s.onload = () => res(true); document.body.appendChild(s);
+  const s = document.createElement('script'); s.src = 'clash.js'; s.onload = () => res(true); document.body.appendChild(s);
 }));
 </script>
 </body>

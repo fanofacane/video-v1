@@ -7,7 +7,7 @@
 video-v1/
 ├── README.md                  本文件：结构与约定
 ├── PROMPT_复刻提示词.md        第一期成片的复刻提示词
-├── PROMPT_ORBIT.md            第二期成片的提示词
+├── PROMPT_COLOR_CLASH.md      第二期成片的提示词
 └── videos/                    每支视频一个文件夹
     ├── 01-type-in-motion/     第一期：TYPE IN MOTION + 剪映开场
     │   ├── README.md          这支视频是什么、怎么构建
@@ -15,7 +15,7 @@ video-v1/
     │   ├── film/  intro/      源码（按视频的组成部分划分）
     │   ├── output/            成片（提交）
     │   └── out/               中间文件（不提交）
-    └── 02-orbit/              第二期：ORBIT，从一个光点到银河再回到光点
+    └── 02-color-clash/        第二期：COLOR CLASH，150 BPM 波普撞色卡点
 ```
 
 ## 新做一支视频的约定

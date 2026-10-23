@@ -32,7 +32,7 @@ if (mode === 'stills') {
     for (let f = w * per; f < Math.min(NF, (w + 1) * per); f++) {
       const buf = Buffer.from(await page.evaluate(([f, S]) => window.renderFrame(f, S), [f, SUB]), 'base64');
       if (!ff.stdin.write(buf)) await new Promise(r => ff.stdin.once('drain', r));
-      if (++done % 60 === 0) console.log(`${done}/${NF} frames ${((Date.now() - t0) / 1000).toFixed(0)}s`);
+      if (++done % 100 === 0) console.log(`${done}/${NF} frames ${((Date.now() - t0) / 1000).toFixed(0)}s`);
     }
     ff.stdin.end(); await closed;
   }));
