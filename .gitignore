@@ -1,7 +1,14 @@
-out/
 node_modules/
-tutorial/vo/
-tutorial/mH/
-tutorial/aH/
-tutorial/recH/
-shape30/*.mp4
+
+# intermediates — every video regenerates these with its build.sh
+out/
+*.wav
+*.mp4
+!videos/*/output/*.mp4
+
+# frames extracted from the film for the editing-app intro, and its large CJK fonts
+videos/*/intro/fs/
+videos/*/intro/fh/
+videos/*/intro/th/
+videos/*/intro/playhead.json
+videos/*/intro/fonts/nsc-*.ttf
