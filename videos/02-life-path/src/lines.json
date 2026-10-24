@@ -1,5 +1,5 @@
 {
- "_note": "Corrected script (ASR typos fixed against the source subtitles). One line on screen at a time. Optional per line: x/y centre (or edge with align), size, hl = keyword (gold, or grey with hlc), emph = big gold line, fx = fog | lost | petal | bloom | walk (meaning-driven effects).",
+ "_note": "Corrected script (ASR typos fixed against the source subtitles). One line on screen at a time. Optional per line: x/y centre (or edge with align), size, hl = keyword (gold, or grey with hlc), emph = big gold line, fx = fog | lost | petal | bloom | walk (meaning-driven effects). vertical = vertical text; hlc = grey | red | green; fx also: mayfly heavy cage fade wake dust clone rain trudge scratch float.",
  "end": 86.9,
  "lines": [
   {
@@ -69,83 +69,135 @@
   },
   {
    "text": "有的人一生追求精彩而活",
-   "hl": "精彩"
+   "hl": "精彩",
+   "y": 480,
+   "size": 88
   },
   {
-   "text": "即使寿弱蜉蝣"
+   "text": "即使寿弱蜉蝣",
+   "size": 62,
+   "fx": "mayfly",
+   "y": 560
   },
   {
-   "text": "仍旧痴迷其中滋味"
+   "text": "仍旧痴迷其中滋味",
+   "size": 92
   },
   {
-   "text": "而有的人寿比冥灵"
+   "text": "而有的人寿比冥灵",
+   "size": 126,
+   "fx": "heavy"
   },
   {
    "text": "却终岁不得自由",
-   "hl": "自由"
+   "hl": "自由",
+   "size": 96,
+   "fx": "cage"
   },
   {
-   "text": "虚度自己的光阴年华"
+   "text": "虚度自己的光阴年华",
+   "size": 88,
+   "fx": "fade"
   },
   {
    "text": "终究在最后一刻翻然醒悟",
-   "hl": "醒悟"
+   "hl": "醒悟",
+   "size": 86,
+   "fx": "wake"
   },
   {
-   "text": "步入红尘"
+   "text": "步入红尘",
+   "size": 160,
+   "hl": "红尘",
+   "hlc": "red"
   },
   {
-   "text": "却大限将至"
+   "text": "却大限将至",
+   "size": 110,
+   "y": 520
   },
   {
-   "text": "辞别了人间"
+   "text": "辞别了人间",
+   "size": 104,
+   "fx": "dust"
   },
   {
-   "text": "然而身在庐山之外"
+   "text": "然而身在庐山之外",
+   "size": 74,
+   "vertical": true,
+   "x": 1540,
+   "y": 470
   },
   {
-   "text": "又岂能知晓山中人之想呢"
+   "text": "又岂能知晓山中人之想呢",
+   "size": 66,
+   "vertical": true,
+   "x": 380,
+   "y": 500
   },
   {
-   "text": "我清楚地知道"
+   "text": "我清楚地知道",
+   "size": 84
   },
   {
    "text": "人与人的路是不可复制的",
-   "emph": true
+   "emph": true,
+   "fx": "clone",
+   "size": 112
   },
   {
-   "text": "我走在自己的人生路上"
+   "text": "我走在自己的人生路上",
+   "size": 88
   },
   {
    "text": "哪怕路途的风雨再大",
-   "hl": "风雨"
+   "hl": "风雨",
+   "fx": "rain",
+   "size": 92
   },
   {
-   "text": "大到我步履维艰"
+   "text": "大到我步履维艰",
+   "fx": "trudge",
+   "size": 96,
+   "x": 860
   },
   {
    "text": "哪怕荆棘丛生",
-   "hl": "荆棘"
+   "hl": "荆棘",
+   "size": 104,
+   "hlc": "red"
   },
   {
-   "text": "刺得我伤痕遍布"
+   "text": "刺得我伤痕遍布",
+   "fx": "scratch",
+   "size": 98
   },
   {
-   "text": "我也仍痴痴笑笑"
+   "text": "我也仍痴痴笑笑",
+   "size": 92
   },
   {
-   "text": "我体会此中滋味"
+   "text": "我体会此中滋味",
+   "size": 92
   },
   {
-   "text": "我相信独游的小船"
+   "text": "我相信独游的小船",
+   "fx": "float",
+   "size": 90,
+   "y": 430
   },
   {
    "text": "终有一天会看到两岸群山青翠",
-   "hl": "青翠"
+   "hl": "青翠",
+   "size": 80,
+   "hlc": "green",
+   "y": 470
   },
   {
    "text": "虫鸟同鸣",
-   "emph": true
+   "emph": true,
+   "size": 150,
+   "y": 470
   }
  ],
  "tint": [
@@ -183,7 +235,67 @@
   ],
   [
    28.4,
-   "#121110"
+   "#151210"
+  ],
+  [
+   30.0,
+   "#2a1a10"
+  ],
+  [
+   44.0,
+   "#2a1a10"
+  ],
+  [
+   47.2,
+   "#3a1a12"
+  ],
+  [
+   48.6,
+   "#1a100d"
+  ],
+  [
+   50.5,
+   "#0e0d0f"
+  ],
+  [
+   52.0,
+   "#141821"
+  ],
+  [
+   61.0,
+   "#141821"
+  ],
+  [
+   62.5,
+   "#1b2026"
+  ],
+  [
+   64.3,
+   "#121417"
+  ],
+  [
+   68.6,
+   "#121417"
+  ],
+  [
+   71.5,
+   "#2a2216"
+  ],
+  [
+   76.5,
+   "#1a2626"
+  ],
+  [
+   79.5,
+   "#1b2f28"
+  ],
+  [
+   84.0,
+   "#23392f"
+  ],
+  [
+   86.9,
+   "#23392f"
   ]
  ]
 }

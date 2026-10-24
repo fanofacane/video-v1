@@ -27,6 +27,17 @@ window.BG = (() => {
         layer(4, 1010, 200, 260, 'rgba(18,19,21,0.92)', 0),
       ];
       S.speed = [6, 11, 18, 28];
+      // 庐山: one tall peak that rises and fills the frame in the middle of the film
+      const c = document.createElement('canvas'); c.width = W; c.height = H; const q = c.getContext('2d');
+      q.fillStyle = 'rgba(26,29,34,0.96)'; q.beginPath(); q.moveTo(0, H);
+      for (let x = 0; x <= W; x += 3) {
+        const env = Math.exp(-Math.pow((x - 960) / 520, 2)), shoulder = Math.exp(-Math.pow((x - 1420) / 260, 2)) * 0.45;
+        q.lineTo(x, 1040 - (env * 780 + shoulder * 520) * (0.82 + 0.18 * ridge(x / 90, 33)));
+      }
+      q.lineTo(W, H); q.closePath(); q.fill();
+      q.globalCompositeOperation = 'destination-out';
+      const fg = q.createLinearGradient(0, 520, 0, H); fg.addColorStop(0, 'rgba(0,0,0,0)'); fg.addColorStop(1, 'rgba(0,0,0,0.75)');
+      q.fillStyle = fg; q.fillRect(0, 0, W, H); S.peak = c;
     }
     if (mode === 'paper') {
       const c = document.createElement('canvas'); c.width = W; c.height = H; const q = c.getContext('2d');
@@ -47,16 +58,58 @@ window.BG = (() => {
     if (mode === 'ink') {
       const sky = g.createLinearGradient(0, 0, 0, H); sky.addColorStop(0, tint); sky.addColorStop(0.65, '#0b0b0c'); sky.addColorStop(1, '#050505');
       g.fillStyle = sky; g.fillRect(0, 0, W, H);
-      const mx = 1420, my = 250;                                                             // a faint moon
-      const mg = g.createRadialGradient(mx, my, 0, mx, my, 220); mg.addColorStop(0, 'rgba(235,225,200,0.16)'); mg.addColorStop(0.25, 'rgba(235,225,200,0.06)'); mg.addColorStop(1, 'rgba(235,225,200,0)');
-      g.fillStyle = mg; g.fillRect(mx - 220, my - 220, 440, 440);
+      const P = (x, a, b) => Math.max(0, Math.min(1, (x - a) / (b - a)));
+      const sun = P(t, 28.4, 30.5) * (1 - P(t, 48.4, 50.4));                                 // a low dusk sun for the "two lives" part
+      const mx = 1420, my = 250 + 120 * sun;                                                 // otherwise a faint moon
+      const mg = g.createRadialGradient(mx, my, 0, mx, my, 220 + 160 * sun);
+      mg.addColorStop(0, `rgba(${235 + 20 * sun},${225 - 60 * sun},${200 - 120 * sun},${0.16 + 0.22 * sun})`); mg.addColorStop(0.25, `rgba(235,${225 - 70 * sun},${200 - 130 * sun},${0.06 + 0.1 * sun})`); mg.addColorStop(1, 'rgba(235,190,120,0)');
+      g.fillStyle = mg; g.fillRect(mx - 400, my - 400, 800, 800);
       S.layers.forEach((c, i) => {
         const off = (t * S.speed[i]) % (c.width - W); g.drawImage(c, -off, 0);
         // mist band drifting above each range
         const y = 600 + i * 120, mist = g.createLinearGradient(0, y - 70, 0, y + 70);
         mist.addColorStop(0, 'rgba(180,186,192,0)'); mist.addColorStop(0.5, `rgba(180,186,192,${0.05 + 0.02 * Math.sin(t * 0.4 + i)})`); mist.addColorStop(1, 'rgba(180,186,192,0)');
         g.fillStyle = mist; g.fillRect(0, y - 70, W, 140);
+        if (i === 1) {                                                                       // 庐山 rises between the far and near ranges
+          const e = x => 1 - Math.pow(1 - x, 3), rise = e(P(t, 51.4, 53.8)) * (1 - P(t, 61.2, 62.8) ** 2);
+          if (rise > 0) {
+            g.drawImage(S.peak, 0, (1 - rise) * 760 + 30 * Math.sin(t * 0.2));
+            const m = g.createLinearGradient(0, 760, 0, 980); m.addColorStop(0, 'rgba(170,180,190,0)'); m.addColorStop(0.5, `rgba(170,180,190,${0.12 * rise})`); m.addColorStop(1, 'rgba(170,180,190,0)');
+            g.fillStyle = m; g.fillRect(0, 760, W, 220);
+          }
+        }
       });
+      // the river and the lone boat (我相信独游的小船 … to the end)
+      const water = P(t, 76.2, 77.8);
+      if (water > 0) {
+        const wy = 920, wg = g.createLinearGradient(0, wy, 0, H); wg.addColorStop(0, `rgba(28,44,46,${0.95 * water})`); wg.addColorStop(1, `rgba(8,12,13,${water})`);
+        g.fillStyle = wg; g.fillRect(0, wy, W, H - wy);
+        g.strokeStyle = `rgba(200,225,215,${0.16 * water})`; g.lineWidth = 1.5; g.beginPath();
+        for (let k = 0; k < 60; k++) { const y = wy + 8 + hash(k + 300) * 150, x = (hash(k + 301) * 2400 + t * (12 + hash(k + 302) * 18)) % 2400 - 240, l = 30 + hash(k + 303) * 90; g.moveTo(x, y); g.lineTo(x + l, y); }
+        g.stroke();
+        const bx = -160 + (t - 76.6) * 125, by = wy + 6 + 3 * Math.sin(t * 1.6), bob = 0.03 * Math.sin(t * 1.3);
+        g.save(); g.translate(bx, by); g.rotate(bob); g.fillStyle = `rgba(10,12,13,${water})`;
+        g.beginPath(); g.moveTo(-70, -8); g.quadraticCurveTo(0, 14, 70, -8); g.lineTo(52, -2); g.quadraticCurveTo(0, 6, -52, -2); g.closePath(); g.fill();   // hull
+        g.fillRect(-3, -86, 4, 80);                                                                 // mast
+        g.beginPath(); g.moveTo(2, -84); g.quadraticCurveTo(40, -48, 36, -12); g.lineTo(2, -12); g.closePath(); g.fill();                 // sail
+        g.beginPath(); g.arc(-26, -18, 7, 0, Math.PI * 2); g.fill(); g.fillRect(-31, -14, 10, 10);                                           // the traveller
+        g.restore();
+        g.strokeStyle = `rgba(10,12,13,${0.5 * water})`; g.lineWidth = 3; g.beginPath();                // its reflection, broken by ripples
+        for (let k = 0; k < 6; k++) { const y = by + 14 + k * 9, w = 70 - k * 9; g.moveTo(bx - w + 6 * Math.sin(t * 3 + k), y); g.lineTo(bx + w + 6 * Math.sin(t * 3 + k), y); }
+        g.stroke();
+      }
+      // 虫鸟同鸣: a few birds cross the sky
+      if (t > 82.6) for (let k = 0; k < 7; k++) {
+        const v = t - 82.6 - hash(k + 500) * 1.2; if (v < 0) continue;
+        const x = 2000 - v * (170 + hash(k + 501) * 90), y = 170 + hash(k + 502) * 260 + 12 * Math.sin(v * 2 + k), f = Math.sin(t * 11 + k * 1.7) * 9, s2 = 0.8 + hash(k + 503) * 0.6;
+        g.strokeStyle = 'rgba(14,20,18,0.85)'; g.lineWidth = 2.4; g.beginPath(); g.moveTo(x - 16 * s2, y - f * s2); g.quadraticCurveTo(x - 6 * s2, y - 3, x, y); g.quadraticCurveTo(x + 6 * s2, y - 3, x + 16 * s2, y - f * s2); g.stroke();
+      }
+      // 青翠: the whole landscape turns green and brighter at the end
+      const green = P(t, 78.6, 84.5);
+      if (green > 0) {
+        g.save(); g.globalCompositeOperation = 'color'; g.fillStyle = `rgba(80,150,115,${0.3 * green})`; g.fillRect(0, 0, W, H);
+        g.globalCompositeOperation = 'screen'; g.fillStyle = `rgba(48,62,52,${0.32 * green})`; g.fillRect(0, 0, W, H); g.restore();
+      }
     }
     if (mode === 'paper') {
       g.drawImage(S.paper, 0, 0);
