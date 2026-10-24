@@ -1,0 +1,15 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>人与人的路</title>
+<style>
+@font-face{font-family:NotoSerifSC;src:url(fonts/serif-400.ttf);font-weight:400}
+@font-face{font-family:NotoSerifSC;src:url(fonts/serif-600.ttf);font-weight:600}
+@font-face{font-family:NotoSerifSC;src:url(fonts/serif-900.ttf);font-weight:900}
+html,body{margin:0;background:#000;overflow:hidden}
+#bg{position:absolute;inset:0;width:1920px;height:1080px;background:radial-gradient(ellipse 70% 65% at 50% 48%,#121110 0%,#070707 60%,#020202 100%)}
+#stage{position:absolute;left:0;top:0;width:1920px;height:1080px;transform-origin:960px 540px}
+.line{position:absolute;white-space:nowrap;font-family:NotoSerifSC;line-height:1}
+.line span{display:inline-block;will-change:transform,opacity}
+.cur{position:absolute;width:3px;background:#F3EFE6}
+</style></head>
+<body><div id="bg"></div><div id="stage"></div>
+<script src="timeline.js"></script><script src="film.js"></script></body></html>

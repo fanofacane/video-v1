@@ -12,3 +12,5 @@ videos/*/intro/fh/
 videos/*/intro/th/
 videos/*/intro/playhead.json
 videos/*/intro/fonts/nsc-*.ttf
+videos/*/src/fonts/serif-*.ttf
+videos/*/output/sample_*.mp4
