@@ -15,3 +15,6 @@ ffmpeg -y -v error -f concat -safe 0 -i out/film.mp4.txt -ss 2 -i out/score.wav 
   -c:v libx264 -crf 19 -preset slow -pix_fmt yuv420p \
   -af loudnorm=I=-14:TP=-1 -c:a aac -b:a 192k -ar 48000 -movflags +faststart output/promo.mp4
 echo "done -> output/promo.mp4"
+# 4) covers: 16:9 and 3:4 (screenshots in film/cover/ come from footage frames 00571 and 00976)
+(cd film && node cover.mjs ../output)
+echo "done -> output/cover_16x9.png, output/cover_3x4.png"

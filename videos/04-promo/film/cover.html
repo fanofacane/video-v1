@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="zh">
+<head>
+<meta charset="utf-8">
+<title>Cover</title>
+<!-- 宣传封面. ?v=wide → 1920x1080, ?v=tall → 1080x1440. Rendered by cover.mjs. -->
+<style>
+@font-face{font-family:'NSC';src:url(fonts/nsc-500.woff2) format('woff2');font-weight:500}
+@font-face{font-family:'NSC';src:url(fonts/nsc-900.woff2) format('woff2');font-weight:900}
+:root{--pur:#5B3DF5;--ink:#121018;--lav:#E9E5FF;--white:#fff}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:#fff}
+body{font-family:NSC,sans-serif;color:var(--ink)}
+.stage{position:relative;overflow:hidden;background:linear-gradient(135deg,#F5F3FF 0%,#E2DCFF 50%,#F0EDFF 100%)}
+.wide .stage{width:1920px;height:1080px}
+.tall .stage{width:1080px;height:1440px}
+.blob{position:absolute;border-radius:50%;filter:blur(60px);opacity:.55}
+.grid{position:absolute;inset:0;background-image:linear-gradient(rgba(91,61,245,.07) 1px,transparent 1px),linear-gradient(90deg,rgba(91,61,245,.07) 1px,transparent 1px);background-size:80px 80px}
+.tag{display:inline-flex;align-items:center;gap:14px;background:var(--ink);color:#fff;font-weight:900;border-radius:999px}
+.tag i{width:14px;height:14px;border-radius:50%;background:#7CFFB2;display:block;box-shadow:0 0 12px #7CFFB2}
+h1{font-weight:900;line-height:1.08;letter-spacing:-.01em}
+h1 .p{color:var(--pur);position:relative;display:inline-block}
+.br{position:absolute;inset:-14px -22px;pointer-events:none}
+.br b{position:absolute;width:38px;height:38px;border:7px solid var(--pur)}
+.br b:nth-child(1){left:0;top:0;border-right:0;border-bottom:0}
+.br b:nth-child(2){right:0;top:0;border-left:0;border-bottom:0}
+.br b:nth-child(3){left:0;bottom:0;border-right:0;border-top:0}
+.br b:nth-child(4){right:0;bottom:0;border-left:0;border-top:0}
+.sub{font-weight:500;color:rgba(18,16,24,.75)}
+.feats{display:flex;flex-wrap:wrap}
+.feat{display:flex;align-items:center;gap:12px;background:#fff;border-radius:999px;font-weight:900;box-shadow:0 10px 30px rgba(60,30,180,.14)}
+.feat s{text-decoration:none;display:grid;place-items:center;border-radius:50%;background:var(--pur);color:#fff;font-weight:900}
+.url{display:inline-flex;align-items:center;gap:18px}
+.url .u{background:var(--ink);color:#fff;font-weight:500;border-radius:999px}
+.url .go{background:var(--pur);color:#fff;font-weight:900;border-radius:999px;box-shadow:0 12px 30px rgba(91,61,245,.45)}
+.win{position:absolute;border-radius:22px;overflow:hidden;background:#fff;box-shadow:0 40px 90px rgba(40,20,120,.35),0 0 0 2px rgba(91,61,245,.18)}
+.win img{display:block;width:100%;height:100%;object-fit:cover}
+.chip{position:absolute;background:#fff;border-radius:999px;font-weight:900;box-shadow:0 12px 28px rgba(60,30,180,.18);white-space:nowrap}
+.chip.dark{background:var(--ink);color:#fff}
+.chip.pur{background:var(--pur);color:#fff}
+.badge{position:absolute;display:grid;place-items:center;text-align:center;border-radius:50%;background:var(--pur);color:#fff;font-weight:900;line-height:1;box-shadow:0 20px 40px rgba(91,61,245,.45)}
+.badge small{display:block;font-weight:500;opacity:.9}
+.stamp{position:absolute;background:#fff;border-radius:18px;font-weight:900;box-shadow:0 14px 30px rgba(40,20,120,.22)}
+.stamp em{font-style:normal;color:var(--pur)}
+
+/* ---------- 16:9 ---------- */
+.wide .copy{position:absolute;left:110px;top:150px;width:900px}
+.wide .tag{font-size:30px;padding:14px 28px}
+.wide h1{font-size:150px;margin-top:40px}
+.wide .sub{font-size:44px;margin-top:34px}
+.wide .feats{gap:18px;margin-top:46px}
+.wide .feat{font-size:34px;padding:14px 30px 14px 16px}
+.wide .feat s{width:46px;height:46px;font-size:24px}
+.wide .url{margin-top:56px}
+.wide .url .u{font-size:34px;padding:20px 40px}
+.wide .url .go{font-size:34px;padding:20px 40px}
+.wide .home{left:1080px;top:110px;width:820px;height:461px;transform:rotate(5deg);opacity:.9}
+.wide .modal{left:930px;top:380px;width:920px;height:568px;transform:rotate(-4deg)}
+.wide .badge{left:1640px;top:250px;width:230px;height:230px;font-size:88px;transform:rotate(10deg)}
+.wide .badge small{font-size:30px;margin-top:8px}
+.wide .chip{font-size:30px;padding:12px 26px}
+.wide .stamp{left:1500px;top:900px;font-size:34px;padding:18px 28px;transform:rotate(-3deg)}
+
+/* ---------- 3:4 ---------- */
+.tall .copy{position:absolute;left:80px;top:90px;right:80px}
+.tall .tag{font-size:28px;padding:12px 26px}
+.tall h1{font-size:132px;margin-top:34px}
+.tall .sub{font-size:40px;margin-top:28px}
+.tall .feats{gap:14px;margin-top:36px}
+.tall .feat{font-size:30px;padding:12px 26px 12px 14px}
+.tall .feat s{width:42px;height:42px;font-size:22px}
+.tall .url{margin-top:40px}
+.tall .url .u{font-size:32px;padding:18px 34px}
+.tall .url .go{font-size:32px;padding:18px 34px}
+.tall .home{left:430px;top:880px;width:680px;height:383px;transform:rotate(6deg);opacity:.9}
+.tall .modal{left:50px;top:930px;width:780px;height:482px;transform:rotate(-4deg)}
+.tall .badge{left:830px;top:720px;width:190px;height:190px;font-size:72px;transform:rotate(10deg)}
+.tall .badge small{font-size:26px;margin-top:6px}
+.tall .chip{font-size:28px;padding:10px 22px}
+.tall .stamp{display:none}
+</style>
+</head>
+<body>
+<div class="stage">
+  <div class="blob" style="width:900px;height:900px;left:-200px;top:-300px;background:#B9ACFF"></div>
+  <div class="blob" style="width:800px;height:800px;right:-200px;bottom:-300px;background:#8E7BFF"></div>
+  <div class="blob" style="width:500px;height:500px;left:40%;top:30%;background:#D6CCFF"></div>
+  <div class="grid"></div>
+
+  <div class="win home"><img src="cover/home.jpg"></div>
+  <div class="win modal"><img src="cover/modal.jpg"></div>
+  <div class="badge"><div>30+<small>平台</small></div></div>
+  <div class="stamp">无水印 · <em>一键下载</em></div>
+
+  <div class="copy">
+    <span class="tag"><i></i>免费使用 · 不限次数 · 无需注册</span>
+    <h1>免费解析<br><span class="p">去水印工具<span class="br"><b></b><b></b><b></b><b></b></span></span></h1>
+    <p class="sub">一个入口，支持 30+ 平台</p>
+    <div class="feats">
+      <span class="feat"><s>✓</s>无水印视频</span>
+      <span class="feat"><s>✓</s>高清图片</span>
+      <span class="feat"><s>✓</s>文案提取</span>
+    </div>
+    <div class="url"><span class="u">media.agentcore.top</span><span class="go">立即使用 →</span></div>
+  </div>
+</div>
+<script>
+const v = new URLSearchParams(location.search).get('v') || 'wide';
+document.body.className = v;
+// platform chips floating round the screenshots (positions per layout)
+const chips = v === 'wide'
+  ? [['抖音', 1010, 140, -6], ['快手', 1440, 70, 4, 'pur'], ['小红书', 1750, 560, 6], ['哔哩哔哩', 960, 930, -4, 'dark'], ['微博', 1230, 985, 3], ['视频号', 1830, 820, -5, 'pur']]
+  : [['抖音', 980, 1010, -6], ['快手', 160, 905, 4, 'pur'], ['小红书', 940, 1330, 6], ['哔哩哔哩', 430, 1400, -4, 'dark'], ['微博', 720, 1395, 3], ['视频号', 120, 1360, -5, 'pur']];
+for (const [name, x, y, r, cls] of chips) {
+  const d = document.createElement('div'); d.className = 'chip ' + (cls || ''); d.textContent = name;
+  d.style.cssText = `left:${x}px;top:${y}px;transform:translate(-50%,-50%) rotate(${r}deg)`; document.querySelector('.stage').appendChild(d);
+}
+window.ready = document.fonts.load('900 40px NSC', '免费解析').then(() => Promise.all([...document.images].map(i => i.decode())));
+</script>
+</body>
+</html>
