@@ -2,7 +2,7 @@
 // Procedural backgrounds (no footage). Mode from ?bg=ink|paper|bokeh (default: none).
 // Each mode pre-renders its static layers once, then only offsets/blends them per frame.
 window.BG = (() => {
-  const mode = new URLSearchParams(location.search).get('bg') || 'none';
+  const mode = new URLSearchParams(location.search).get('bg') || 'ink';
   const cv = document.getElementById('bgc'), g = cv.getContext('2d'), W = 1920, H = 1080;
   const hash = n => { let h = Math.imul(n | 0, 2654435761) ^ 0x5bd1e995; h = Math.imul(h ^ (h >>> 15), 2246822507); return ((h ^ (h >>> 13)) >>> 0) / 4294967296; };
   const noise1 = (x, seed) => { const i = Math.floor(x), f = x - i, s = f * f * (3 - 2 * f); return hash(i * 31 + seed) * (1 - s) + hash((i + 1) * 31 + seed) * s; };

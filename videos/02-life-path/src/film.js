@@ -35,9 +35,9 @@ function build() {
     l.start = st[0]; l.last = Math.max(...st);
     const next = n + 1 < L.length ? L[n + 1].t[0][0] : window.END;
     l.exit = n + 1 < L.length ? Math.max(next - 0.28, l.last + 0.15) : window.END - 0.9;
-    if (l.fx === 'petal') l.exit = l.last + 0.3;            // the petals fall instead of floating away
+    if (l.fx === 'petal') l.exit = l.last + 0.12;            // the petals fall instead of floating away
     if (l.fx === 'walk') l.exit = l.last + 0.55;            // the walkers step out to the right
-    l.gone = l.fx === 'petal' ? l.exit + 1.9 : l.fx === 'walk' ? l.exit + 1.6 : l.exit + 0.3 + l.spans.length * 0.012;
+    l.gone = l.fx === 'petal' ? l.exit + 1.4 : l.fx === 'walk' ? l.exit + 1.6 : l.exit + 0.3 + l.spans.length * 0.012;
   });
 }
 
@@ -62,8 +62,8 @@ function charState(l, i, t) {
     void b;
   }
   if (l.fx === 'petal') {                                                       // falls like petals, in a scattered order
-    const f0 = l.exit + hash(i * 7 + 3) * 0.5, p = P(t, f0, f0 + 1.4);
-    if (p > 0) { y += 520 * eIn(p); x += 70 * Math.sin(p * 5 + i * 2) * p; rot += (hash(i + 11) - 0.5) * 160 * p; op *= 1 - P(p, 0.45, 1); }
+    const f0 = l.exit + hash(i * 7 + 3) * 0.25, p = P(t, f0, f0 + 1.1), side = (l.cx[i] - 960) / 960;
+    if (p > 0) { y += 380 * eIn(p); x += (220 * side + 50 * Math.sin(p * 5 + i * 2)) * p; rot += (hash(i + 11) - 0.5) * 160 * p; op *= 1 - P(p, 0.2, 0.75); }
   } else if (l.fx === 'walk' && l.spans[i].walk) {                              // step, step, step… off to the right
     const w0 = l.exit + (l.text.length - 1 - i) * 0.07, v = Math.max(0, t - w0), step = 0.15, k = Math.floor(v / step), ph = (v % step) / step;
     if (v > 0) { x += (k + eIO(ph)) * 95; y -= 22 * Math.sin(Math.PI * ph); rot += 6 * Math.sin(Math.PI * ph); }
