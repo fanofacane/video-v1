@@ -1,11 +1,11 @@
 'use strict';
-// 产品宣传片 — 30s, 1920x1080, 120 BPM (beat 0.5s = 15 frames, bar 2s).
+// 产品宣传片 — 28s (timeline 2–30s; the 0–2s hook was cut), 1920x1080, 120 BPM (beat 0.5s = 15 frames, bar 2s).
 // Screen recording (browser + OBS cropped away) shown in a clean rounded window; every camera move
 // (push-in, pan, whip) starts on a beat. Between footage shots: kinetic type cards.
 // Palette = the product's own: lavender, brand purple, ink, white.
 // Footage frames: ../out/footage/NNNNN.jpg, frame n = source time 1.0 + (n-1)/30 (1102x620 crop).
 
-const W = 1920, H = 1080, CX = W / 2, CY = H / 2, FPS = 30, DUR = 30, BT = 0.5, D2R = Math.PI / 180, TAU = Math.PI * 2;
+const W = 1920, H = 1080, CX = W / 2, CY = H / 2, FPS = 30, DUR = 30, T0 = 2, BT = 0.5, D2R = Math.PI / 180, TAU = Math.PI * 2;
 const PUR = '#5B3DF5', LAV = '#E9E5FF', INK = '#121018', WHITE = '#FFFFFF';
 const FW = 1102, FH = 620, BASEK = 1500 / FW;          // footage size; window is 1500 px wide at zoom 1
 const cv = document.getElementById('c'), ctx = cv.getContext('2d');
@@ -142,28 +142,6 @@ function cam(o) { ctx.translate(CX + (o.x || 0), CY + (o.y || 0)); ctx.rotate((o
 const PLATS = ['抖音', '快手', '小红书', '哔哩哔哩', '微博', '视频号', '西瓜视频', '知乎', '微信公众号', '网易云音乐'];
 
 // ============================================================ scenes
-// A 0–2  hook: 刷到好视频 → 想保存却有水印？ → the watermark gets wiped off
-function sA(t) {
-  lavender(t);
-  // a phone-ish video card on the right
-  const cq = eOutX(P(t, 0.25, 0.7)), cx = L(2300, 1320, cq), cy = CY + 20;
-  ctx.save(); ctx.translate(cx, cy); ctx.rotate(L(14, 6, cq) * D2R);
-  ctx.shadowColor = 'rgba(40,20,120,0.4)'; ctx.shadowBlur = 60; ctx.shadowOffsetY = 30;
-  ctx.fillStyle = INK; ctx.beginPath(); ctx.roundRect(-230, -400, 460, 800, 46); ctx.fill(); ctx.shadowColor = 'transparent';
-  const gg = ctx.createLinearGradient(0, -370, 0, 370); gg.addColorStop(0, PUR); gg.addColorStop(1, '#2A1A8F'); ctx.fillStyle = gg; ctx.beginPath(); ctx.roundRect(-208, -376, 416, 752, 32); ctx.fill();
-  ctx.fillStyle = WHITE; ctx.beginPath(); ctx.moveTo(-40, -60); ctx.lineTo(-40, 60); ctx.lineTo(60, 0); ctx.closePath(); ctx.fill();
-  // watermark tag: grows and shakes at 1.0, wiped at 1.5
-  const wipe = eInX(P(t, 1.5, 1.8)), wq = t < 1.0 ? 1 : 1 + 0.4 * pop(t, 1.0, 0.25, 3), sh = t > 1.0 && t < 1.5 ? Math.sin(t * 80) * 6 : 0;
-  ctx.save(); ctx.translate(-60 + sh, 270); ctx.scale(wq, wq); ctx.globalAlpha = 1 - wipe;
-  ctx.fillStyle = 'rgba(255,255,255,0.28)'; ctx.beginPath(); ctx.roundRect(-110, -34, 220, 68, 12); ctx.fill();
-  txt('@ 水印', 0, 0, 40, { c: 'rgba(255,255,255,0.9)', w: 900 }); ctx.restore(); ctx.globalAlpha = 1;
-  if (t > 1.45) { const q = eIOX(P(t, 1.45, 1.8)); ctx.fillStyle = WHITE; ctx.fillRect(-208 + q * 0, 220, 416 * q, 100); ctx.fillStyle = rgba(PUR, 1); ctx.fillRect(-208 + 416 * q - 10, 205, 14, 130); }
-  ctx.restore();
-  // copy on the left
-  if (t < 1.0) rise('刷到好视频', 620, CY - 20, 150, 0.0, t, { c: INK });
-  else { const out = eInX(P(t, 1.85, 2.0)); ctx.save(); cam({ s: 1 + out * 0.2 }); ctx.globalAlpha = 1 - out;
-    rise('想保存', 560, CY - 100, 130, 1.0, t, { c: INK }); rise('却有水印？', 620, CY + 70, 130, 1.12, t, { c: PUR }); ctx.restore(); ctx.globalAlpha = 1; }
-}
 // B 2–4  title: 免费解析 + [去水印] with the site's corner brackets, 一个入口 · 支持 30+ 平台
 function sB(t) {
   lavender(t, 1.3);
@@ -318,7 +296,7 @@ function sI(t) {
   if (t < 28.15) { ctx.fillStyle = rgba(WHITE, 1 - P(t, 28.0, 28.15)); ctx.fillRect(0, 0, W, H); }
 }
 
-const SCENES = [[0, 2, sA], [2, 4, sB], [4, 10, sC], [10, 12, sD], [12, 18, sE], [18, 20, sF], [20, 24, sG], [24, 28, sH], [28, 30, sI]];
+const SCENES = [[2, 4, sB], [4, 10, sC], [10, 12, sD], [12, 18, sE], [18, 20, sF], [20, 24, sG], [24, 28, sH], [28, 30, sI]];
 
 function draw(t) {
   ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.globalAlpha = 1; ctx.globalCompositeOperation = 'source-over';
@@ -326,13 +304,13 @@ function draw(t) {
   bg(LAV);
   for (const [a, b, fn] of SCENES) if (TH >= a - 1e-6 && TH < b - 1e-6) { ctx.save(); fn(t); ctx.restore(); }
   ctx.setTransform(1, 0, 0, 1, 0, 0);
-  const blk = Math.max(1 - P(t, 0, 0.12), P(t, 29.88, 30)); if (blk > 0) { ctx.fillStyle = `rgba(0,0,0,${blk})`; ctx.fillRect(0, 0, W, H); }
+  const blk = Math.max(1 - P(t, T0, T0 + 0.1), P(t, 29.88, 30)); if (blk > 0) { ctx.fillStyle = `rgba(0,0,0,${blk})`; ctx.fillRect(0, 0, W, H); }
 }
 async function ensure(ts) { const need = new Set(); for (const t of ts) { const s = srcAt(t); if (s !== null) need.add(fidx(s)); } await Promise.all([...need].map(load)); }
-window.setTime = async t => { t = clamp(t, 0, DUR - 1e-4); await ensure([t]); draw(t); };
+window.setTime = async t => { t = clamp(t, T0, DUR - 1e-4); await ensure([t]); draw(t); };
 const acc = document.createElement('canvas'); acc.width = W; acc.height = H; const actx = acc.getContext('2d');
 window.renderFrame = async (f, SUB) => {
-  const ts = Array.from({ length: SUB }, (_, k) => clamp((f - 0.25 + (k + 0.5) * 0.5 / SUB) / FPS, 0, DUR - 1e-4));
+  const ts = Array.from({ length: SUB }, (_, k) => clamp(T0 + (f - 0.25 + (k + 0.5) * 0.5 / SUB) / FPS, T0, DUR - 1e-4));   // output frame f = timeline T0 + f/30
   await ensure(ts);
   ts.forEach((t, k) => { draw(t); actx.globalAlpha = 1 / (k + 1); actx.drawImage(cv, 0, 0); });
   actx.globalAlpha = 1; return acc.toDataURL('image/png').slice(22);

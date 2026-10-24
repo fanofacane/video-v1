@@ -1,4 +1,4 @@
-"""120 BPM score for the product promo (30s): bright future-house, Am – F – C – G, one chord per bar.
+"""120 BPM score for the product promo (timeline 0–30s; build.sh keeps 2–30s): bright future-house, Am – F – C – G, one chord per bar.
 Every camera move gets a whoosh, every callout a pop, every on-screen click a mouse click. Cue times match promo.js.
 usage: python3 score.py out.wav"""
 import numpy as np, wave, sys
@@ -142,11 +142,6 @@ def lead_line(t0, t1, g=1.0):
         if m: add(lead(m, BT / 2 - 0.03, g), tb, pan=0.1, send=0.3)
         k += 1
 
-# 0–2 hook
-arps(0, 2.0, 1.3); pads(0, 2.0, 1400, 0.8)
-add(popfx(700), 0.0); add(swish(0.8, 0.4), 0.25)
-for k in range(4): add(chop('ah', 69 + [0, 3, 5, 7][k], 0.12, 0.5), 1.0 + k * 0.125)       # "却有水印？" stutter
-add(swish(1.0, 0.3), 1.45); add(whoosh(0.5, 300, 10000, 1.0, 2.5), 1.5)
 # 2–4 title
 add(boom(1.2), 2.0); add(crash(2.0, 0.9), 2.0, send=0.3)
 drums(2.0, 4.0, clap_on=False); bassline(2.0, 4.0); pads(2.0, 4.0, 2400, 0.8)

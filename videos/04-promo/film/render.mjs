@@ -6,7 +6,7 @@ import path from 'path'; import fs from 'fs';
 const require = createRequire(import.meta.url);
 const pw = require('/opt/node22/lib/node_modules/playwright');
 const url = 'file://' + path.resolve('index.html') + '?render';
-const FPS = 30, NF = 900;
+const FPS = 30, NF = 840;   // 28s
 async function open(browser) {
   const page = await browser.newPage({ viewport: { width: 1920, height: 1080 }, deviceScaleFactor: 1 });
   page.on('pageerror', e => console.error('PAGE ERROR', e)); page.on('console', m => console.log('console:', m.text()));
