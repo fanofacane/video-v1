@@ -1,0 +1,75 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>封面</title>
+<style>
+@font-face{font-family:NotoSerifSC;src:url(../src/fonts/serif-400.ttf);font-weight:400}
+@font-face{font-family:NotoSerifSC;src:url(../src/fonts/serif-600.ttf);font-weight:600}
+@font-face{font-family:NotoSerifSC;src:url(../src/fonts/serif-900.ttf);font-weight:900}
+html,body{margin:0;background:#000;overflow:hidden}
+canvas,#txt{position:absolute;left:0;top:0;width:1080px;height:1920px}
+#txt{font-family:NotoSerifSC;color:#F3EFE6}
+.t{position:absolute;left:0;right:0;text-align:center;white-space:nowrap}
+</style></head>
+<body><canvas id="c" width="1080" height="1920"></canvas>
+<div id="txt">
+  <div class="t" style="top:300px;font:400 40px NotoSerifSC;letter-spacing:.5em;color:#B9B2A4">人与人的路，是不可复制的</div>
+  <div class="t" style="top:430px;font:900 168px NotoSerifSC;letter-spacing:.06em;text-shadow:0 6px 40px rgba(0,0,0,.6)">别再责怪</div>
+  <div class="t" style="top:640px;font:900 150px NotoSerifSC;letter-spacing:.04em;text-shadow:0 6px 40px rgba(0,0,0,.6)"><span style="color:#E2B66C">从前的自己</span>了</div>
+  <div class="t" style="top:860px"><span style="display:inline-block;width:90px;height:2px;background:#E2B66C;vertical-align:middle"></span></div>
+  <div class="t" style="top:900px;font:400 38px NotoSerifSC;letter-spacing:.2em;color:#D8D1C3">因为他当时站在雾里，也很迷茫</div>
+  <div class="t" style="top:1760px;font:600 30px NotoSerifSC;letter-spacing:.4em;color:#9C9586">每一个字 · 每一座山 · 都由 AI 绘制</div>
+</div>
+<script>
+const cv = document.getElementById('c'), g = cv.getContext('2d'), W = 1080, H = 1920;
+const hash = n => { let h = Math.imul(n | 0, 2654435761) ^ 0x5bd1e995; h = Math.imul(h ^ (h >>> 15), 2246822507); return ((h ^ (h >>> 13)) >>> 0) / 4294967296; };
+const noise1 = (x, s) => { const i = Math.floor(x), f = x - i, k = f * f * (3 - 2 * f); return hash(i * 31 + s) * (1 - k) + hash((i + 1) * 31 + s) * k; };
+const ridge = (x, s) => { let v = 0, a = 1, f = 1, n = 0; for (let o = 0; o < 5; o++) { v += a * noise1(x * f, s + o * 97); n += a; a *= 0.5; f *= 2.1; } return v / n; };
+// sky: night blue-grey turning to a hint of dawn green near the horizon
+const sky = g.createLinearGradient(0, 0, 0, H);
+sky.addColorStop(0, '#07080a'); sky.addColorStop(0.45, '#151a1e'); sky.addColorStop(0.72, '#1c2a26'); sky.addColorStop(1, '#070908');
+g.fillStyle = sky; g.fillRect(0, 0, W, H);
+// moon
+const mx = 780, my = 1150, mg = g.createRadialGradient(mx, my, 0, mx, my, 300);
+mg.addColorStop(0, 'rgba(240,230,205,0.55)'); mg.addColorStop(0.08, 'rgba(240,230,205,0.35)'); mg.addColorStop(0.3, 'rgba(240,230,205,0.08)'); mg.addColorStop(1, 'rgba(240,230,205,0)');
+g.fillStyle = mg; g.fillRect(mx - 300, my - 300, 600, 600);
+// mountain ranges, far to near, each fading at its foot into mist
+[[1, 1330, 330, 360, 'rgba(120,136,132,0.35)', 6], [2, 1450, 330, 300, 'rgba(78,92,88,0.5)', 3], [3, 1560, 300, 240, 'rgba(40,50,47,0.75)', 1.5], [4, 1660, 220, 200, 'rgba(16,20,19,0.95)', 0]]
+.forEach(([s, base, amp, sc, col, blur], i) => {
+  const c = document.createElement('canvas'); c.width = W; c.height = H; const q = c.getContext('2d');
+  q.filter = blur ? `blur(${blur}px)` : 'none'; q.fillStyle = col; q.beginPath(); q.moveTo(0, H);
+  for (let x = 0; x <= W; x += 3) q.lineTo(x, base - amp * Math.pow(ridge((x + 400 * s) / sc, s), 1.6));
+  q.lineTo(W, H); q.closePath(); q.fill();
+  q.filter = 'none'; q.globalCompositeOperation = 'destination-out';
+  const gr = q.createLinearGradient(0, base - amp * 0.2, 0, base + 200); gr.addColorStop(0, 'rgba(0,0,0,0)'); gr.addColorStop(1, 'rgba(0,0,0,0.85)');
+  q.fillStyle = gr; q.fillRect(0, 0, W, H); g.drawImage(c, 0, 0);
+  const y = 1300 + i * 110, m = g.createLinearGradient(0, y - 80, 0, y + 80);
+  m.addColorStop(0, 'rgba(185,195,192,0)'); m.addColorStop(0.5, 'rgba(185,195,192,0.07)'); m.addColorStop(1, 'rgba(185,195,192,0)');
+  g.fillStyle = m; g.fillRect(0, y - 80, W, 160);
+});
+// water + the lone boat under the moon
+const wy = 1640, wg = g.createLinearGradient(0, wy, 0, H); wg.addColorStop(0, 'rgba(26,40,38,0.97)'); wg.addColorStop(1, '#050706');
+g.fillStyle = wg; g.fillRect(0, wy, W, H - wy);
+g.strokeStyle = 'rgba(210,225,215,0.16)'; g.lineWidth = 1.5; g.beginPath();
+for (let k = 0; k < 50; k++) { const y = wy + 10 + hash(k + 300) * 240, x = hash(k + 301) * W, l = 30 + hash(k + 303) * 110; g.moveTo(x, y); g.lineTo(x + l, y); }
+g.stroke();
+g.strokeStyle = 'rgba(240,230,205,0.22)'; g.lineWidth = 3; g.beginPath();                        // moonlight on the water
+for (let k = 0; k < 9; k++) { const y = wy + 16 + k * 22, w = 120 - k * 9; g.moveTo(mx - w, y); g.lineTo(mx + w, y); }
+g.stroke();
+const bx = 360, by = wy + 8; g.save(); g.translate(bx, by); g.scale(1.5, 1.5); g.fillStyle = '#0a0c0c';
+g.beginPath(); g.moveTo(-70, -8); g.quadraticCurveTo(0, 14, 70, -8); g.lineTo(52, -2); g.quadraticCurveTo(0, 6, -52, -2); g.closePath(); g.fill();
+g.fillRect(-3, -86, 4, 80); g.beginPath(); g.moveTo(2, -84); g.quadraticCurveTo(40, -48, 36, -12); g.lineTo(2, -12); g.closePath(); g.fill();
+g.beginPath(); g.arc(-26, -18, 7, 0, Math.PI * 2); g.fill(); g.fillRect(-31, -14, 10, 10); g.restore();
+g.strokeStyle = 'rgba(10,12,12,0.55)'; g.lineWidth = 4; g.beginPath();
+for (let k = 0; k < 6; k++) { const y = by + 22 + k * 12, w = 100 - k * 13; g.moveTo(bx - w, y); g.lineTo(bx + w, y); }
+g.stroke();
+// birds
+for (let k = 0; k < 5; k++) {
+  const x = 640 + hash(k + 600) * 340, y = 1020 + hash(k + 601) * 120, s = 0.9 + hash(k + 602) * 0.6, f = 6 + hash(k + 603) * 8;
+  g.strokeStyle = 'rgba(12,16,15,0.9)'; g.lineWidth = 2.4; g.beginPath(); g.moveTo(x - 16 * s, y - f); g.quadraticCurveTo(x - 6 * s, y - 3, x, y); g.quadraticCurveTo(x + 6 * s, y - 3, x + 16 * s, y - f); g.stroke();
+}
+// darken the top so the title reads, plus a soft vignette
+const shade = g.createLinearGradient(0, 0, 0, 1100); shade.addColorStop(0, "rgba(0,0,0,0.55)"); shade.addColorStop(1, "rgba(0,0,0,0)");
+g.fillStyle = shade; g.fillRect(0, 0, W, 1100);
+const v = g.createRadialGradient(W / 2, H * 0.5, 500, W / 2, H * 0.5, 1250); v.addColorStop(0, 'rgba(0,0,0,0)'); v.addColorStop(1, 'rgba(0,0,0,0.5)');
+g.fillStyle = v; g.fillRect(0, 0, W, H);
+window.ready = document.fonts.load('900 100px NotoSerifSC', '别再责怪从前的自己了').then(() => document.fonts.ready).then(() => true);
+</script></body></html>
