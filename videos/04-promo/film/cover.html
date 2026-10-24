@@ -107,14 +107,6 @@ h1 .p{color:var(--pur);position:relative;display:inline-block}
 <script>
 const v = new URLSearchParams(location.search).get('v') || 'wide';
 document.body.className = v;
-// platform chips floating round the screenshots (positions per layout)
-const chips = v === 'wide'
-  ? [['抖音', 1010, 140, -6], ['快手', 1440, 70, 4, 'pur'], ['小红书', 1750, 560, 6], ['哔哩哔哩', 960, 930, -4, 'dark'], ['微博', 1230, 985, 3], ['视频号', 1830, 820, -5, 'pur']]
-  : [['抖音', 980, 1010, -6], ['快手', 160, 905, 4, 'pur'], ['小红书', 940, 1330, 6], ['哔哩哔哩', 430, 1400, -4, 'dark'], ['微博', 720, 1395, 3], ['视频号', 120, 1360, -5, 'pur']];
-for (const [name, x, y, r, cls] of chips) {
-  const d = document.createElement('div'); d.className = 'chip ' + (cls || ''); d.textContent = name;
-  d.style.cssText = `left:${x}px;top:${y}px;transform:translate(-50%,-50%) rotate(${r}deg)`; document.querySelector('.stage').appendChild(d);
-}
 window.ready = document.fonts.load('900 40px NSC', '免费解析').then(() => Promise.all([...document.images].map(i => i.decode())));
 </script>
 </body>
