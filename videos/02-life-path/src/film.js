@@ -8,7 +8,8 @@ const eIn = t => t * t, eOut = t => 1 - Math.pow(1 - t, 3), eIO = t => (t < 0.5 
 const hash = n => { let h = Math.imul(n | 0, 2654435761) ^ 0x5bd1e995; h = Math.imul(h ^ (h >>> 15), 2246822507); return ((h ^ (h >>> 13)) >>> 0) / 4294967296; };
 const hex = c => [1, 3, 5].map(i => parseInt(c.slice(i, i + 2), 16));
 const lerpC = (a, b, k) => 'rgb(' + a.map((v, i) => Math.round(v + (b[i] - v) * k)).join(',') + ')';
-const WHITE = '#F3EFE6', GOLD = '#E2B66C', GREY = '#8A867E';
+const LIGHT = window.BG && window.BG.light;
+const WHITE = LIGHT ? '#1E1B18' : '#F3EFE6', GOLD = LIGHT ? '#B23A2E' : '#E2B66C', GREY = LIGHT ? '#9A9080' : '#8A867E';
 const stage = document.getElementById('stage'), bg = document.getElementById('bg');
 const fx = document.getElementById('fx'), g = fx.getContext('2d');
 const L = window.LINES;
@@ -112,6 +113,7 @@ function tint(t) {
   for (let i = 0; i + 1 < K.length; i++) if (t >= K[i][0]) c = t < K[i + 1][0] ? lerpC(hex(K[i][1]), hex(K[i + 1][1]), (t - K[i][0]) / (K[i + 1][0] - K[i][0])) : K[i + 1][1];
   if (c[0] === '#') c = lerpC(hex(c), hex(c), 0);
   bg.style.background = `radial-gradient(ellipse 70% 65% at 50% 48%, ${c} 0%, #070707 62%, #020202 100%)`;
+  if (window.BG.mode !== 'none') window.BG.draw(t, c);
 }
 
 function render(t) {
@@ -134,5 +136,5 @@ function render(t) {
 window.setTime = t => render(t);
 window.ready = (async () => {
   await Promise.all(['600', '900'].map(w => document.fonts.load(`${w} 40px NotoSerifSC`, L.map(l => l.text).join(''))));
-  build(); render(0); return true;
+  window.BG.init(); build(); render(0); return true;
 })();

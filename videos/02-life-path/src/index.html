@@ -5,10 +5,10 @@
 @font-face{font-family:NotoSerifSC;src:url(fonts/serif-600.ttf);font-weight:600}
 @font-face{font-family:NotoSerifSC;src:url(fonts/serif-900.ttf);font-weight:900}
 html,body{margin:0;background:#000;overflow:hidden}
-#bg,#fx,#stage{position:absolute;left:0;top:0;width:1920px;height:1080px}
+#bg,#bgc,#fx,#stage{position:absolute;left:0;top:0;width:1920px;height:1080px}
 #stage{transform-origin:960px 540px}
 .line{position:absolute;white-space:nowrap;font-family:NotoSerifSC;line-height:1}
 .line span{display:inline-block;will-change:transform,opacity;transform-origin:50% 80%}
 </style></head>
-<body><div id="bg"></div><div id="stage"></div><canvas id="fx" width="1920" height="1080"></canvas>
-<script src="timeline.js"></script><script src="film.js"></script></body></html>
+<body><div id="bg"></div><canvas id="bgc" width="1920" height="1080"></canvas><div id="stage"></div><canvas id="fx" width="1920" height="1080"></canvas>
+<script src="timeline.js"></script><script src="bg.js"></script><script src="film.js"></script></body></html>
