@@ -19,5 +19,5 @@ for ln in spec['lines']:
             k += 1
         else: ts.append(list(ts[-1]) if ts else [0, 0])
     out.append({**ln, 't': ts})
-open(sys.argv[3], 'w').write('window.END = ' + json.dumps(spec['end']) + ';\nwindow.LINES = ' + json.dumps(out, ensure_ascii=False) + ';\n')
+open(sys.argv[3], 'w').write('window.END = ' + json.dumps(spec['end']) + ';\nwindow.TINT = ' + json.dumps(spec.get('tint', [])) + ';\nwindow.LINES = ' + json.dumps(out, ensure_ascii=False) + ';\n')
 print('lines', len(out), 'chars used', k, 'of', len(asr))
