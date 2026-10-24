@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="zh">
+<head>
+<meta charset="utf-8">
+<title>Promo</title>
+<style>
+@font-face{font-family:'NSC';src:url(fonts/nsc-500.woff2) format('woff2');font-weight:500}
+@font-face{font-family:'NSC';src:url(fonts/nsc-900.woff2) format('woff2');font-weight:900}
+html,body{margin:0;background:#000;overflow:hidden}
+canvas{display:block;width:1920px;height:1080px}
+</style>
+</head>
+<body>
+<canvas id="c" width="1920" height="1080"></canvas>
+<script>
+window.ready = Promise.all(['500 40px NSC', '900 40px NSC'].map(f => document.fonts.load(f, '免费解析'))).then(() => new Promise(res => {
+  const s = document.createElement('script'); s.src = 'promo.js'; s.onload = () => res(true); document.body.appendChild(s);
+}));
+</script>
+</body>
+</html>

@@ -5,6 +5,7 @@ out/
 *.wav
 *.mp4
 !videos/*/output/*.mp4
+!videos/*/source/*.mp4
 
 # frames extracted from the film for the editing-app intro, and its large CJK fonts
 videos/*/intro/fs/
